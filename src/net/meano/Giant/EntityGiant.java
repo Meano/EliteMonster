@@ -42,7 +42,8 @@ public class EntityGiant extends EntityMonster{
 	}*/
 
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
-import net.minecraft.server.v1_8_R2.*;
+//import net.minecraft.server.v1_8_R3.*;
+import net.minecraft.server.v1_8_R3.*;
 
 public class EntityGiant extends EntityMonster
 {
@@ -74,13 +75,13 @@ public class EntityGiant extends EntityMonster
 		this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget<>(this, EntityIronGolem.class, true));
 	}
 
- 	protected void initAttributes() {
+ 	/*protected void initAttributes() {
  		super.initAttributes();
  		getAttributeInstance(GenericAttributes.b).setValue(35.0D);
  		getAttributeInstance(GenericAttributes.d).setValue(0.2300000041723251D);
     		getAttributeInstance(GenericAttributes.e).setValue(3.0D);
     		//getAttributeMap().b(a).setValue(this.random.nextDouble() * 0.1000000014901168D);
- 	}
+ 	}*/
 
   /*protected void h() {
     super.h();
