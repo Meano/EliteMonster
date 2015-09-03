@@ -60,7 +60,7 @@ public class EliteMonsterMain extends JavaPlugin {
 	}
 	public void RegisterGiant(){
 		Bukkit.getLogger().info(getServer().getVersion());
-		 if (getServer().getVersion().contains("(MC: 1.8.3)")) {
+		 if (getServer().getVersion().contains("(MC: 1.8.8)")) {
 			 try {
 				 Field fieldc = EntityTypes.class.getDeclaredField("c");
 				 Field fielde = EntityTypes.class.getDeclaredField("e");

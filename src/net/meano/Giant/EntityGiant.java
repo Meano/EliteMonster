@@ -47,7 +47,7 @@ import net.minecraft.server.v1_8_R3.*;
 
 public class EntityGiant extends EntityMonster
 {
-	//protected static final IAttribute a = new AttributeRanged(null, "giant.spawnReinforcements", 0.0D, 0.0D, 1.0D).a("Spawn Reinforcements Chance");
+	protected static final IAttribute a = new AttributeRanged(null, "giant.spawnReinforcements", 0.0D, 0.0D, 1.0D).a("Spawn Reinforcements Chance");
 	//private static final UUID b = UUID.fromString("A9766B59-9566-4402-BC1F-2EE2A276D839");
 	private final PathfinderGoalBreakDoor bm = new PathfinderGoalBreakDoor(this);
 	private boolean bo = false;
@@ -66,22 +66,27 @@ public class EntityGiant extends EntityMonster
 	}
 
 	protected void n() {
-		if (this.world.spigotConfig.zombieAggressiveTowardsVillager) this.goalSelector.a(4, new PathfinderGoalMeleeAttack(this, EntityVillager.class, 1.0D, true));
-		this.goalSelector.a(4, new PathfinderGoalMeleeAttack(this, EntityIronGolem.class, 1.0D, true));
-		this.goalSelector.a(6, new PathfinderGoalMoveThroughVillage(this, 1.0D, false));
-		this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, true, new Class[] { EntityPigZombie.class }));
-		this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget<>(this, EntityHuman.class, true));
-		if (this.world.spigotConfig.zombieAggressiveTowardsVillager) this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget<>(this, EntityVillager.class, false));
-		this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget<>(this, EntityIronGolem.class, true));
+		if (world.spigotConfig.zombieAggressiveTowardsVillager) {
+			goalSelector.a(4, new PathfinderGoalMeleeAttack(this, EntityVillager.class, 1.0D, true));
+		}
+		goalSelector.a(4, new PathfinderGoalMeleeAttack(this, EntityIronGolem.class, 1.0D, true));
+		goalSelector.a(6, new PathfinderGoalMoveThroughVillage(this, 1.0D, false));
+		targetSelector.a(1, new PathfinderGoalHurtByTarget(this, true, new Class[] { EntityPigZombie.class }));
+		targetSelector.a(2, new PathfinderGoalNearestAttackableTarget<>(this, EntityHuman.class, true));
+		if (world.spigotConfig.zombieAggressiveTowardsVillager) {
+			targetSelector.a(2, new PathfinderGoalNearestAttackableTarget<>(this, EntityVillager.class, false));
+		}
+		targetSelector.a(2, new PathfinderGoalNearestAttackableTarget<>(this, EntityIronGolem.class, true));
 	}
 
- 	/*protected void initAttributes() {
- 		super.initAttributes();
- 		getAttributeInstance(GenericAttributes.b).setValue(35.0D);
- 		getAttributeInstance(GenericAttributes.d).setValue(0.2300000041723251D);
-    		getAttributeInstance(GenericAttributes.e).setValue(3.0D);
-    		//getAttributeMap().b(a).setValue(this.random.nextDouble() * 0.1000000014901168D);
- 	}*/
+	  protected void initAttributes()
+	  {
+		  super.initAttributes();
+		  getAttributeInstance(GenericAttributes.FOLLOW_RANGE).setValue(35.0D);
+		  getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.2300000041723251D);
+		  getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(3.0D);
+		  getAttributeMap().b(a).setValue(random.nextDouble() * 0.1000000014901161D);
+	  }
 
   /*protected void h() {
     super.h();
@@ -104,15 +109,18 @@ public class EntityGiant extends EntityMonster
  		return this.bo;
  	}
 
- 	public void a(boolean flag) {
- 		if (this.bo != flag) {
- 			this.bo = flag;
- 			if (flag)
- 				this.goalSelector.a(1, this.bm);
- 			else
- 				this.goalSelector.a(this.bm);
- 		}
- 	}
+	public void a(boolean flag)
+	{
+		if (bo != flag)
+		{
+			bo = flag;
+			if (flag) {
+				goalSelector.a(1, bm);
+			} else {
+				goalSelector.a(bm);
+			}
+		}
+	}
 
  	protected int getExpValue(EntityHuman entityhuman) {
  		if (isBaby()) {
@@ -188,7 +196,7 @@ public class EntityGiant extends EntityMonster
  	}*/
 
  	protected void a(BlockPosition blockposition, Block block) {
- 		makeSound("mob.zombie.step", 0.15F, 1.0F);
+ 		makeSound("mob.zombie.step", 0.15F, 5.0F);
  	}
 
  	protected Item getLoot() {
