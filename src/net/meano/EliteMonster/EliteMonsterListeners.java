@@ -102,7 +102,8 @@ public class EliteMonsterListeners implements Listener{
 				NotInCat = false;
 			}
 		}
-		if((DeadEntity.hasMetadata("isFall"))||(DeadEntity.getKiller()==null)){
+		boolean isUnNormalDead = (DeadEntity.getKiller()==null)&&(DeadEntity instanceof Monster)&&(!(DeadEntity instanceof Zombie))&&(!(DeadEntity instanceof Skeleton));
+		if((DeadEntity.hasMetadata("isFall")||isUnNormalDead)){
 			EMM.getLogger().info("刷怪塔掉落物缩减。 X:"+DeadEntity.getLocation().getBlockX()+" Z:"+DeadEntity.getLocation().getBlockZ());
 			int FallExpRate = (int)(Math.random()*150);
 			if(FallExpRate>20){
