@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 import net.meano.Giant.EntityGiant;
-import net.minecraft.server.v1_8_R3.BiomeBase;
-import net.minecraft.server.v1_8_R3.BiomeBase.BiomeMeta;
-import net.minecraft.server.v1_8_R3.EntityGiantZombie;
-import net.minecraft.server.v1_8_R3.EntityTypes;
+import net.minecraft.server.v1_9_R1.BiomeBase;
+import net.minecraft.server.v1_9_R1.BiomeBase.BiomeMeta;
+import net.minecraft.server.v1_9_R1.EntityGiantZombie;
+import net.minecraft.server.v1_9_R1.EntityTypes;
 import net.steeleyes.catacombs.Catacombs;
 
 import org.bukkit.Bukkit;
@@ -33,31 +33,31 @@ public class EliteMonsterMain extends JavaPlugin {
 		PM.registerEvents(new EliteMonsterListeners(this), this);
 	}
 	@SuppressWarnings("unchecked")
-	public void RegisterOnTheWorld(){
-		try {
-			for (Field field : net.minecraft.server.v1_8_R3.BiomeBase.class.getDeclaredFields()) {
-				if ((field.getType().getSimpleName().equals(net.minecraft.server.v1_8_R3.BiomeBase.class.getSimpleName())) && (field.get(null) != null)) {
-					for (Field list : net.minecraft.server.v1_8_R3.BiomeBase.class.getDeclaredFields()) {
-						if ((list.getType().getSimpleName().equals(List.class.getSimpleName())) && (
-								(field.get(null) == net.minecraft.server.v1_8_R3.BiomeBase.PLAINS) || 
-								(field.get(null) == net.minecraft.server.v1_8_R3.BiomeBase.ICE_PLAINS) || 
-								(field.get(null) == net.minecraft.server.v1_8_R3.BiomeBase.STONE_BEACH) || 
-								(field.get(null) == net.minecraft.server.v1_8_R3.BiomeBase.EXTREME_HILLS) || 
-								(field.get(null) == net.minecraft.server.v1_8_R3.BiomeBase.EXTREME_HILLS_PLUS) || (
-								(field.get(null) == net.minecraft.server.v1_8_R3.BiomeBase.DESERT) && (list.getName().equals("au"))))) {
-							list.setAccessible(true);
-							List<BiomeMeta> metaList = (List<BiomeMeta>)list.get(field.get(null));
-							metaList.add(new BiomeBase.BiomeMeta(EntityGiantZombie.class, 10, 1, 4));
-						}
-					}
-				}
-			}
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-	}
+//	public void RegisterOnTheWorld(){
+//		try {
+//			for (Field field : net.minecraft.server.v1_9_R1.BiomeBase.class.getDeclaredFields()) {
+//				if ((field.getType().getSimpleName().equals(net.minecraft.server.v1_9_R1.BiomeBase.class.getSimpleName())) && (field.get(null) != null)) {
+//					for (Field list : net.minecraft.server.v1_9_R1.BiomeBase.class.getDeclaredFields()) {
+//						if ((list.getType().getSimpleName().equals(List.class.getSimpleName())) && (
+//								(field.get(null) == net.minecraft.server.v1_9_R1.BiomeBase.PLAINS) || 
+//								(field.get(null) == net.minecraft.server.v1_9_R1.BiomeBase.ICE_PLAINS) || 
+//								(field.get(null) == net.minecraft.server.v1_9_R1.BiomeBase.STONE_BEACH) || 
+//								(field.get(null) == net.minecraft.server.v1_9_R1.BiomeBase.EXTREME_HILLS) || 
+//								(field.get(null) == net.minecraft.server.v1_9_R1.BiomeBase.EXTREME_HILLS_PLUS) || (
+//								(field.get(null) == net.minecraft.server.v1_9_R1.BiomeBase.DESERT) && (list.getName().equals("au"))))) {
+//							list.setAccessible(true);
+//							List<BiomeMeta> metaList = (List<BiomeMeta>)list.get(field.get(null));
+//							metaList.add(new BiomeBase.BiomeMeta(EntityGiantZombie.class, 10, 1, 4));
+//						}
+//					}
+//				}
+//			}
+//		}
+//		catch (Exception e)
+//		{
+//			e.printStackTrace();
+//		}
+//	}
 	public void RegisterGiant(){
 		Bukkit.getLogger().info(getServer().getVersion());
 		 if (getServer().getVersion().contains("(MC: 1.8.8)")) {

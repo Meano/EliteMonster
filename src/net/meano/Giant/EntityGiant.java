@@ -1,49 +1,17 @@
 package net.meano.Giant;
-/*
-import net.minecraft.server.v1_8_R2.DamageSource;
-import net.minecraft.server.v1_8_R2.EntityCreeper;
-import net.minecraft.server.v1_8_R2.EntityHuman;
-import net.minecraft.server.v1_8_R2.EntityIronGolem;
-import net.minecraft.server.v1_8_R2.EntityMonster;
-import net.minecraft.server.v1_8_R2.EntityPigZombie;
-import net.minecraft.server.v1_8_R2.EntityVillager;
-import net.minecraft.server.v1_8_R2.Navigation;
-import net.minecraft.server.v1_8_R2.PathfinderGoalFloat;
-import net.minecraft.server.v1_8_R2.PathfinderGoalHurtByTarget;
-import net.minecraft.server.v1_8_R2.PathfinderGoalLookAtPlayer;
-import net.minecraft.server.v1_8_R2.PathfinderGoalMeleeAttack;
-import net.minecraft.server.v1_8_R2.PathfinderGoalMoveThroughVillage;
-import net.minecraft.server.v1_8_R2.PathfinderGoalMoveTowardsRestriction;
-import net.minecraft.server.v1_8_R2.PathfinderGoalNearestAttackableTarget;
-import net.minecraft.server.v1_8_R2.PathfinderGoalRandomLookaround;
-import net.minecraft.server.v1_8_R2.PathfinderGoalRandomStroll;
-import net.minecraft.server.v1_8_R2.World;
 
-public class EntityGiant extends EntityMonster{
-	public EntityGiant(World world) {
-		super(world);
-		// TODO Auto-generated constructor stub
-		((Navigation)getNavigation()).b(true);
-		this.goalSelector.a(0, new PathfinderGoalFloat(this));
-		this.goalSelector.a(2, new PathfinderGoalMeleeAttack(this, EntityHuman.class, 1.0D, false));
-		this.goalSelector.a(5, new PathfinderGoalMoveTowardsRestriction(this, 1.0D));
-		this.goalSelector.a(7, new PathfinderGoalRandomStroll(this, 1.0D));
-		this.goalSelector.a(8, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 25.0F));
-		this.goalSelector.a(8, new PathfinderGoalRandomLookaround(this));
-		setSize(this.width, this.length*6);
-		
-		this.goalSelector.a(4, new PathfinderGoalMeleeAttack(this, EntityVillager.class, 1.0D, true));
-		this.goalSelector.a(4, new PathfinderGoalMeleeAttack(this, 1.0D, true));
-		this.goalSelector.a(6, new PathfinderGoalMoveThroughVillage(this, 1.0D, false));
-		this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, true, new Class[] { EntityPigZombie.class }));
-		this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget<EntityHuman>(this, EntityHuman.class, true));
-		this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget<EntityVillager>(this, EntityVillager.class, false));
-		this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget<EntityIronGolem>(this, EntityIronGolem.class, true));
-	}*/
-
+import java.util.Calendar;
+import java.util.List;
+import java.util.Random;
+import java.util.UUID;
+import org.bukkit.craftbukkit.v1_9_R1.CraftServer;
+import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
-//import net.minecraft.server.v1_8_R3.*;
-import net.minecraft.server.v1_8_R3.*;
+import org.bukkit.event.entity.EntityCombustEvent;
+import org.bukkit.event.entity.EntityTargetEvent.TargetReason;
+import org.bukkit.plugin.PluginManager;
+import org.spigotmc.SpigotWorldConfig;
+import net.minecraft.server.v1_9_R1.*;
 
 public class EntityGiant extends EntityMonster
 {
@@ -54,60 +22,43 @@ public class EntityGiant extends EntityMonster
 
 	public EntityGiant(World world) {
 		super(world);
-		((Navigation)getNavigation()).b(true);
+		setSize(0.6F, (float) (1.95*3));
+	}
+
+	protected void r()
+	{
 		this.goalSelector.a(0, new PathfinderGoalFloat(this));
-		this.goalSelector.a(2, new PathfinderGoalMeleeAttack(this, EntityHuman.class, 1.0D, false));
+		this.goalSelector.a(2, new PathfinderGoalMeleeAttack(this, 1.0D, false));
 		this.goalSelector.a(5, new PathfinderGoalMoveTowardsRestriction(this, 1.0D));
 		this.goalSelector.a(7, new PathfinderGoalRandomStroll(this, 1.0D));
 		this.goalSelector.a(8, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0F));
 		this.goalSelector.a(8, new PathfinderGoalRandomLookaround(this));
-		n();
-		setSize(0.6F, (float) (1.95*3));
+		o();
+	}
+	
+	protected void o() {
+		this.goalSelector.a(6, new PathfinderGoalMoveThroughVillage(this, 1.0D, false));
+		this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, true, new Class[] { EntityPigZombie.class }));
+		this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, EntityHuman.class, true));
+		if (this.world.spigotConfig.zombieAggressiveTowardsVillager) {
+			this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget(this, EntityVillager.class, false));
+		}
+		this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget(this, EntityIronGolem.class, true));
 	}
 
-	protected void n() {
-		if (world.spigotConfig.zombieAggressiveTowardsVillager) {
-			goalSelector.a(4, new PathfinderGoalMeleeAttack(this, EntityVillager.class, 1.0D, true));
-		}
-		goalSelector.a(4, new PathfinderGoalMeleeAttack(this, EntityIronGolem.class, 1.0D, true));
-		goalSelector.a(6, new PathfinderGoalMoveThroughVillage(this, 1.0D, false));
-		targetSelector.a(1, new PathfinderGoalHurtByTarget(this, true, new Class[] { EntityPigZombie.class }));
-		targetSelector.a(2, new PathfinderGoalNearestAttackableTarget<>(this, EntityHuman.class, true));
-		if (world.spigotConfig.zombieAggressiveTowardsVillager) {
-			targetSelector.a(2, new PathfinderGoalNearestAttackableTarget<>(this, EntityVillager.class, false));
-		}
-		targetSelector.a(2, new PathfinderGoalNearestAttackableTarget<>(this, EntityIronGolem.class, true));
-	}
-
-	  protected void initAttributes()
-	  {
+	protected void initAttributes(){
 		  super.initAttributes();
 		  getAttributeInstance(GenericAttributes.FOLLOW_RANGE).setValue(35.0D);
 		  getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.2300000041723251D);
 		  getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(3.0D);
 		  getAttributeMap().b(a).setValue(random.nextDouble() * 0.1000000014901161D);
-	  }
+	}
 
-  /*protected void h() {
-    super.h();
-    getDataWatcher().a(12, Byte.valueOf((byte)0));
-    getDataWatcher().a(13, Byte.valueOf((byte)0));
-    getDataWatcher().a(14, Byte.valueOf((byte)0));
-  }*/
-
- 	public int br() {
- 		int i = super.br() + 2;
-
- 		if (i > 20) {
- 			i = 20;
- 		}
-
- 		return i;
- 	}
-
- 	public boolean cn() {
- 		return this.bo;
- 	}
+	private boolean bB = false;
+	public boolean dc()
+	{
+		return this.bB;
+	}
 
 	public void a(boolean flag)
 	{
@@ -171,7 +122,7 @@ public class EntityGiant extends EntityMonster
  		boolean flag = super.r(entity);
  		if (flag) {
  			int i = this.world.getDifficulty().a();
- 			if ((bA() == null) && (isBurning()) && (this.random.nextFloat() < i * 0.3F))
+ 			if ((getItemInMainHand() == null) && (isBurning()) && (this.random.nextFloat() < i * 0.3F))
  			{
  				EntityCombustByEntityEvent event = new EntityCombustByEntityEvent(getBukkitEntity(), entity.getBukkitEntity(), 2 * i);
  				this.world.getServer().getPluginManager().callEvent(event);
@@ -195,9 +146,10 @@ public class EntityGiant extends EntityMonster
  		return "mob.giant.death";
  	}*/
 
- 	protected void a(BlockPosition blockposition, Block block) {
- 		makeSound("mob.zombie.step", 0.15F, 5.0F);
- 	}
+ 	protected void a(BlockPosition blockposition, Block block)
+	{
+	    a(SoundEffects.hu, 0.15F, 1.0F);
+	}
 
  	protected Item getLoot() {
  		return Items.PUMPKIN_PIE;

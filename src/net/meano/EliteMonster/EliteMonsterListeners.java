@@ -97,6 +97,7 @@ public class EliteMonsterListeners implements Listener{
 	public void onEntityDeath(EntityDeathEvent event){
 		final LivingEntity DeadEntity = event.getEntity();
 		boolean NotInCat = true;
+		Bukkit.broadcastMessage(DeadEntity.getName() +"死了");
 		if(EMM.CatacombsPlugin!=null){
 			if(EMM.CatacombsPlugin.getDungeons().getDungeon(DeadEntity.getLocation().getBlock()) != null){
 				NotInCat = false;
