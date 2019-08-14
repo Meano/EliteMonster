@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JRE8"/>
-	<classpathentry kind="lib" path="../Library/Spigot-API-1.9.0.jar"/>
-	<classpathentry kind="lib" path="../Library/Spigot-1.9.0.jar"/>
 	<classpathentry kind="lib" path="../AnimalsRestrict/lib/Catacombs.jar"/>
+	<classpathentry kind="lib" path="D:/Project/Java/Library/Spigot-API.jar"/>
+	<classpathentry kind="lib" path="D:/Project/Java/Library/Spigot-Server.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
