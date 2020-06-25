@@ -1,42 +1,30 @@
 package net.meano.EliteMonster;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
-
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Color;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
-//import org.bukkit.craftbukkit.v1_9_R1.CraftWorld;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarFlag;
+import org.bukkit.boss.BarStyle;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.MagmaCube;
-import org.bukkit.entity.Monster;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Skeleton;
-import org.bukkit.entity.Slime;
-import org.bukkit.entity.Wolf;
-import org.bukkit.entity.Zombie;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-//import net.minecraft.server.v1_9_R1.MathHelper;
-//import net.minecraft.server.v1_9_R1.World;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
 
 public class EliteMonsterListeners implements Listener {
 	EliteMonsterMain EMM;
@@ -100,13 +88,16 @@ public class EliteMonsterListeners implements Listener {
 	public void onEntityDeath(EntityDeathEvent event) {
 		final LivingEntity DeadEntity = event.getEntity();
 		boolean NotInCat = true;
-		if (EMM.CatacombsPlugin != null) {
-			if (EMM.CatacombsPlugin.getDungeons().getDungeon(DeadEntity.getLocation().getBlock()) != null) {
-				NotInCat = false;
-			}
-		}
-		boolean isUnNormalDead = (DeadEntity.getKiller() == null) && (DeadEntity instanceof Monster)
-				&& (!(DeadEntity instanceof Zombie)) && (!(DeadEntity instanceof Skeleton));
+//		if (EMM.CatacombsPlugin != null) {
+//			if (EMM.CatacombsPlugin.getDungeons().getDungeon(DeadEntity.getLocation().getBlock()) != null) {
+//				NotInCat = false;
+//			}
+//		}
+		boolean isUnNormalDead = 
+				(DeadEntity.getKiller() == null) &&
+				(DeadEntity instanceof Monster) &&
+				(!(DeadEntity instanceof Zombie)) &&
+				(!(DeadEntity instanceof Skeleton));
 		if ((DeadEntity.hasMetadata("isFall") || isUnNormalDead && NotInCat)) {
 			/*EMM.getLogger().info("刷怪塔掉落物缩减。 X:" + DeadEntity.getLocation().getBlockX() + " Z:" + DeadEntity.getLocation().getBlockZ());
 			int FallExpRate = (int) (Math.random() * 150);
@@ -145,7 +136,7 @@ public class EliteMonsterListeners implements Listener {
 									.getDisplayName())
 							.append("]").toString();
 				}
-				int Exp = 15 + (int) (Math.random() * DeadEntity.getHealth()) / 2;
+				int Exp = 15 + (int) (Math.random() * DeadEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) / 2;
 				Bukkit.broadcastMessage(new StringBuffer().append(DeadEntity.getCustomName()).append(ChatColor.RED)
 						.append(" 被 ").append(ChatColor.YELLOW).append(KillerName).append(KillerAmor)
 						.append(ChatColor.RED).append(" 杀死了！掉落经验").append(Exp).append("点！").toString());
@@ -284,44 +275,29 @@ public class EliteMonsterListeners implements Listener {
 	}
 
 	// 巨鬼
-	/*
-	 * public void ZombieGiantGhost(LivingEntity GiantGhost){ Giant GiantZombie;
-	 * Location GiantLocation = GiantGhost.getLocation();
-	 * 
-	 * //GiantZombie= (Giant) GiantGhost.getWorld().spawnEntity(GiantLocation,
-	 * EntityType.GIANT); GiantGhost.remove(); //CreatureSpawnEvent e = new
-	 * CreatureSpawnEvent(GiantZombie,SpawnReason.NATURAL);
-	 * //Bukkit.getPluginManager().callEvent(e); double x = GiantLocation.getX();
-	 * double y = GiantLocation.getY(); double z = GiantLocation.getZ(); float pitch
-	 * = GiantLocation.getPitch(); float yaw = GiantLocation.getYaw();
-	 * net.minecraft.server.v1_9_R1.Entity newGiant = null; //newGiant = new
-	 * EntityGiant(((CraftWorld)GiantGhost.getWorld()).getHandle());
-	 * newGiant.setLocation(x, y, z, pitch, yaw); //World world =
-	 * ((CraftWorld)GiantGhost.getWorld()).getHandle(); int i =
-	 * MathHelper.floor(newGiant.locX / 16.0D); int j =
-	 * MathHelper.floor(newGiant.locZ / 16.0D); // world.getChunkAt(i,
-	 * j).a(newGiant); // world.entityList.add(newGiant); // try { // Method b =
-	 * World.class.getDeclaredMethod("b", new Class[] {
-	 * net.minecraft.server.v1_9_R1.Entity.class }); // b.setAccessible(true); //
-	 * b.invoke(world, new Object[] { (net.minecraft.server.v1_9_R1.Entity)newGiant
-	 * }); // } catch (Exception e) { // e.printStackTrace(); // }
-	 * //world.b(newGiant); //if(newGiant.) GiantZombie = new
-	 * CraftGiant(newGiant.world.getServer(),(EntityGiant) newGiant);
-	 * GiantZombie.addPotionEffect(FireResistance(35000,1), false); //抗火
-	 * GiantZombie.addPotionEffect(Speed(35000,3),false); //三倍加速
-	 * GiantZombie.addPotionEffect(IncreaseDamage(35000,3),false); //三倍攻击
-	 * GiantZombie.addPotionEffect(Jump(35000,5),false); //5倍跳跃
-	 * GiantZombie.setCustomName((new
-	 * StringBuilder()).append(ChatColor.BOLD).append(ChatColor.GREEN).append("巨鬼").
-	 * toString()); //巨鬼名字 GiantZombie.setCustomNameVisible(true); //名字显示
-	 * GiantZombie.setCanPickupItems(true); //可拾取掉落物
-	 * GiantZombie.getEquipment().setHelmet(new ItemStack(Material.IRON_HELMET, 1));
-	 * GiantZombie.getEquipment().setHelmetDropChance(0.2F);
-	 * GiantZombie.getEquipment().setChestplate(new
-	 * ItemStack(Material.DIAMOND_CHESTPLATE, 1)); //钻石胸甲
-	 * GiantZombie.getEquipment().setChestplateDropChance(0.15F); //胸甲掉落15%
-	 * GiantZombie.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(60D); //血量50 GiantZombie.setHealth(60D); //血量50 }
-	 */
+	public void ZombieGiantGhost(LivingEntity GiantGhost){
+		Giant GiantZombie;
+		Location GiantLocation = GiantGhost.getLocation();
+
+		GiantZombie= (Giant) GiantGhost.getWorld().spawnEntity(GiantLocation, EntityType.GIANT);
+		GiantGhost.remove();
+		Bukkit.createBossBar("巨鬼", BarColor.GREEN, BarStyle.SOLID, BarFlag.PLAY_BOSS_MUSIC);;
+		GiantZombie.setAI(true);
+		GiantZombie.addPotionEffect(FireResistance(35000,1), false);								//抗火
+		GiantZombie.addPotionEffect(Speed(35000,3),false);											//三倍加速
+		//GiantZombie.addPotionEffect(IncreaseDamage(35000,3), false);								//三倍攻击
+		GiantZombie.addPotionEffect(Jump(35000,5),false);											//5倍跳跃
+		GiantZombie.setCustomName((new StringBuilder()).append(ChatColor.BOLD).append(ChatColor.GREEN).append("巨鬼").toString()); //巨鬼名字
+		GiantZombie.setCustomNameVisible(true); 													//名字显示
+		GiantZombie.setCanPickupItems(true); 														//可拾取掉落物
+		GiantZombie.getEquipment().setHelmet(new ItemStack(Material.IRON_HELMET, 1));
+		GiantZombie.getEquipment().setHelmetDropChance(0.2F);
+		GiantZombie.getEquipment().setChestplate(new ItemStack(Material.DIAMOND_CHESTPLATE, 1));	//钻石胸甲
+		GiantZombie.getEquipment().setChestplateDropChance(0.15F);									//胸甲掉落15%
+		GiantZombie.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(100D);					//血量100
+		GiantZombie.setHealth(100D); 																//血量100
+	}
+
 	
 	// 钻石矿工
 	public void ZombieDiamondMiner(LivingEntity Miner) {
@@ -464,11 +440,11 @@ public class EliteMonsterListeners implements Listener {
 		Random RandSpawn = new Random();
 		boolean NotInCat = true;
 		// 地牢插件检查
-		if (EMM.CatacombsPlugin != null) {
-			if (EMM.CatacombsPlugin.getDungeons().getDungeon(Spawned.getLocation().getBlock()) != null) {
-				NotInCat = false;
-			}
-		}
+//		if (EMM.CatacombsPlugin != null) {
+//			if (EMM.CatacombsPlugin.getDungeons().getDungeon(Spawned.getLocation().getBlock()) != null) {
+//				NotInCat = false;
+//			}
+//		}
 		
 		// 铁傀儡控制
 //		if (event.getEntityType().equals(EntityType.IRON_GOLEM)) {
@@ -567,6 +543,11 @@ public class EliteMonsterListeners implements Listener {
 			}
 			switch (entityType) {
 				default:
+					if (Spawned.getWorld().getName().equals("world_nether")) {
+						if (Spawned.getLocation().getBlockY() > 155 & Rate < (Spawned.getLocation().getBlockY() - 155)) {
+							Spawned.remove();
+						}
+					}
 					break;
 				case SKELETON:
 					if (Rate == 1) {
@@ -584,6 +565,9 @@ public class EliteMonsterListeners implements Listener {
 						}
 					break;
 				case ZOMBIE:
+					if (event.getSpawnReason().equals(SpawnReason.SPAWNER_EGG)) {
+						ZombieGiantGhost(Spawned);
+					}
 					if (Rate == 1) {
 						ZombieDiamondMiner(Spawned); // 钻石矿工
 						if (!NotInCat) {
@@ -591,7 +575,7 @@ public class EliteMonsterListeners implements Listener {
 							Spawned.setHealth(39D);
 						}
 					} else if (Rate == 2 && NotInCat) {
-						// ZombieGiantGhost(Spawned); //巨鬼
+						ZombieGiantGhost(Spawned); //巨鬼
 					}
 					break;
 				case MAGMA_CUBE:
@@ -608,7 +592,7 @@ public class EliteMonsterListeners implements Listener {
 						WolfFireWolf(Spawned); // 烈焰之狼
 					}
 					break;
-				case PIG_ZOMBIE:
+				case ZOMBIFIED_PIGLIN:
 //					if (Spawned.getWorld().getName().equals("world_nether")) {
 //						if (Spawned.getLocation().getBlockY() > 127) {
 //							Spawned.remove();
