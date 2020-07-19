@@ -88,11 +88,11 @@ public class EliteMonsterListeners implements Listener {
 	public void onEntityDeath(EntityDeathEvent event) {
 		final LivingEntity DeadEntity = event.getEntity();
 		boolean NotInCat = true;
-//		if (EMM.CatacombsPlugin != null) {
-//			if (EMM.CatacombsPlugin.getDungeons().getDungeon(DeadEntity.getLocation().getBlock()) != null) {
-//				NotInCat = false;
-//			}
-//		}
+		if (EMM.CatacombsPlugin != null) {
+			if (EMM.CatacombsPlugin.getDungeons().getDungeon(DeadEntity.getLocation().getBlock()) != null) {
+				NotInCat = false;
+			}
+		}
 		boolean isUnNormalDead = 
 				(DeadEntity.getKiller() == null) &&
 				(DeadEntity instanceof Monster) &&
@@ -440,11 +440,11 @@ public class EliteMonsterListeners implements Listener {
 		Random RandSpawn = new Random();
 		boolean NotInCat = true;
 		// 地牢插件检查
-//		if (EMM.CatacombsPlugin != null) {
-//			if (EMM.CatacombsPlugin.getDungeons().getDungeon(Spawned.getLocation().getBlock()) != null) {
-//				NotInCat = false;
-//			}
-//		}
+		if (EMM.CatacombsPlugin != null) {
+			if (EMM.CatacombsPlugin.getDungeons().getDungeon(Spawned.getLocation().getBlock()) != null) {
+				NotInCat = false;
+			}
+		}
 		
 		// 铁傀儡控制
 //		if (event.getEntityType().equals(EntityType.IRON_GOLEM)) {
